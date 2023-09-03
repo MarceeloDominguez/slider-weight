@@ -1,7 +1,17 @@
 import { useState } from "react";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  Image,
+  ScrollView,
+  StatusBar,
+} from "react-native";
 import Slider from "@react-native-community/slider";
+import Header from "./components/Header";
+import Button from "./components/Button";
+import ButtonTab from "./components/ButtonTab";
 
 const { width } = Dimensions.get("window");
 
@@ -39,27 +49,53 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <Text style={styles.kilograms}>{kilograms.toFixed(1)}</Text>
-      <View style={styles.balance}>
-        {renderBalanceLines()}
-        {renderBalanceMiddleLines()}
-        <Slider
-          style={[styles.containerSlider, { left: kilograms >= 55 ? 1.5 : 0 }]}
-          minimumValue={0}
-          maximumValue={100}
-          minimumTrackTintColor="transparent"
-          maximumTrackTintColor="transparent"
-          step={0.1}
-          value={kilograms}
-          onValueChange={onValueChange}
-          thumbImage={require("./assets/indicador.png")}
-          lowerLimit={0.3}
-          upperLimit={100}
-        />
-      </View>
-    </View>
+    <>
+      <Header />
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.contentContainerStyle}
+        showsVerticalScrollIndicator={false}
+      >
+        <StatusBar backgroundColor="#2A3240" />
+        <View style={styles.containerImage}>
+          <Image source={require("./assets/circle-lines.png")} />
+          <Image
+            source={require("./assets/image-profile.png")}
+            style={{ position: "absolute" }}
+          />
+        </View>
+        <View style={styles.containerTitle}>
+          <Text style={styles.title}>What’s your pet’s weight?</Text>
+          <Text style={styles.subTitle}>
+            Automatic selection based on your pets breed. Adjust according to
+            reality
+          </Text>
+        </View>
+        <Text style={styles.kilograms}>{kilograms.toFixed(1)}</Text>
+        <View style={styles.balance}>
+          {renderBalanceLines()}
+          {renderBalanceMiddleLines()}
+          <Slider
+            style={[
+              styles.containerSlider,
+              { left: kilograms >= 55 ? 1.5 : 0 },
+            ]}
+            minimumValue={0}
+            maximumValue={100}
+            minimumTrackTintColor="transparent"
+            maximumTrackTintColor="transparent"
+            step={0.1}
+            value={kilograms}
+            onValueChange={onValueChange}
+            thumbImage={require("./assets/indicador.png")}
+            lowerLimit={0.3}
+            upperLimit={100}
+          />
+        </View>
+        <ButtonTab />
+        <Button />
+      </ScrollView>
+    </>
   );
 }
 
@@ -67,8 +103,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#2A3240",
+  },
+  contentContainerStyle: {
     alignItems: "center",
-    justifyContent: "center",
+    paddingTop: 20,
   },
   containerSlider: {
     width: WIDTH_SCREEN,
@@ -94,8 +132,35 @@ const styles = StyleSheet.create({
   },
   kilograms: {
     color: "#74B4FF",
-    marginBottom: 40,
+    marginBottom: 10,
     fontSize: 80,
     fontWeight: "bold",
+  },
+  containerImage: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 10,
+  },
+  containerTitle: {
+    maxWidth: 320,
+    paddingTop: 30,
+    paddingBottom: 10,
+  },
+  title: {
+    fontSize: 15,
+    fontWeight: "500",
+    lineHeight: 20,
+    color: "#ffffff",
+    textAlign: "center",
+    marginBottom: 5,
+    letterSpacing: 0.3,
+  },
+  subTitle: {
+    fontSize: 13,
+    fontWeight: "400",
+    lineHeight: 20,
+    textAlign: "center",
+    color: "#D9DFE6",
+    letterSpacing: 0.3,
   },
 });
